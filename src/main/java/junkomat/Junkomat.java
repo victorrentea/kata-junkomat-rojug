@@ -10,7 +10,6 @@ public class Junkomat {
 	
 	private Map<Integer, ProductInfo> products = new HashMap<>();
 	
-	// 3 care ia 'subcomponenta' ca param de constructor
 	public Junkomat(CoinMachine coinMachine) {
 		this.coinMachine = coinMachine;
 	}
@@ -20,22 +19,32 @@ public class Junkomat {
 	}
 	
 	
-	
-	//1 care expune prea multe  vs Tell Don't Ask
-//	public CoinMachine getCoinMachine() {
-//		return coinMachine;
-//	}
-	// 2 care face delegare
-//	public void setCoinStock(Coins newStock) {
-//		coinMachine.setCoinStock(newStock);
-//	}
-	
-	public PurchasedDrinkAndChange purchase(DrinkRequest selection, Coins deposit) {
-		int price = products.get(selection.getCode()).getPrice();
-		int changeCents = deposit.getTotalCents() - price;
+	public Coins purchase(DrinkRequest selection, Coins depositCoins) {
+		int depositCents = depositCoins.getTotalCents();
+		ProductInfo productInfo = products.get(selection.getCode());
+		int priceCents = productInfo.getPrice();
+		if (productInfo.getStock() == 0) {
+			throw new IllegalArgumentException("Out of stock");
+		}
 		
-		Coins changeCoins = coinMachine.provideChange(changeCents, deposit);
-		return null;
+		if (depositCents < priceCents) {
+			throw new IllegalArgumentException("Not enough money");
+		}
+		
+		int changeCents = depositCoins.getTotalCents() - priceCents;
+		
+		// NU AICI decrementez stocu'
+		
+		Coins changeCoins = coinMachine.provideChange(changeCents, depositCoins);
+		
+		// ci aici , dupa verificarea ca am sa-i dau rest
+		productInfo.decrementStock();
+		
+		return changeCoins;
+	}
+	
+	int getStock(DrinkRequest selection) {
+		return products.get(selection.getCode()).getStock();
 	}
 
 }
@@ -49,8 +58,19 @@ class ProductInfo {
 		this.stock = stock;
 	}
 
+	public void decrementStock() {
+		if (stock == 0) {
+			throw new IllegalArgumentException("Out of stock");
+		}
+		stock--;
+	}
+
 	public int getPrice() {
 		return price;
+	}
+	
+	public int getStock() {
+		return stock;
 	}
 	
 	

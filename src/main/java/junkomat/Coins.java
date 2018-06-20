@@ -20,6 +20,9 @@ class Coins {
 	private static final Map<Coin, Integer> NO_COINS_STOCK = 
 			Stream.of(Coin.values())
 			.collect(toMap(identity(), c -> 0));
+
+
+	public static final Coins EMPTY = new Coins();
 	
 	private final Map<Coin, Integer> coinNumbers;
 
