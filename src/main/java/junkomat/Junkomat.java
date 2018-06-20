@@ -18,9 +18,15 @@ public class Junkomat {
 		this.products = newProducts;
 	}
 	
-	
+	/**
+	 * @throws IllegalArgumentException if some problem occurs
+	 * @return Coins if the purchase is successful
+	 */
 	public Coins purchase(DrinkRequest selection, Coins depositCoins) {
 		int depositCents = depositCoins.getTotalCents();
+		if (!products.containsKey(selection.getCode()))	{
+			throw new IllegalArgumentException("Out of stock");
+		}
 		ProductInfo productInfo = products.get(selection.getCode());
 		int priceCents = productInfo.getPrice();
 		if (productInfo.getStock() == 0) {
@@ -33,15 +39,14 @@ public class Junkomat {
 		
 		int changeCents = depositCoins.getTotalCents() - priceCents;
 		
-		// NU AICI decrementez stocu'
+		Coins changeCoins = coinMachine.acceptPaymentCoins(changeCents, depositCoins);
 		
-		Coins changeCoins = coinMachine.provideChange(changeCents, depositCoins);
-		
-		// ci aici , dupa verificarea ca am sa-i dau rest
-		productInfo.decrementStock();
+		productInfo.decrementStock(); // poa' sa crape asta ?? NU
 		
 		return changeCoins;
 	}
+	// CQRS - Eventual Consistency , Event Store , DDD HAOS 
+	// CQS -- Command
 	
 	int getStock(DrinkRequest selection) {
 		return products.get(selection.getCode()).getStock();

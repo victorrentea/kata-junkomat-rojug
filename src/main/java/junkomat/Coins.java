@@ -42,11 +42,8 @@ class Coins {
 		this.coinNumbers = coinNumbers;
 	}
 
-	
-	
-	
 	// TWO, TWO, ---> (TWO -> 2)
-	public Coins(Coin... coinArr) {
+	Coins(Coin... coinArr) {
 		Map<Coin, Long> numiVine = Stream.of(coinArr)
 				.collect(groupingBy(c->c, counting()));
 		
@@ -56,13 +53,28 @@ class Coins {
 		}
 	}
 	
-	public Coins add(Coins toAdd) {
+	// CQS -- metoda intoarce un rezultat dar NU face side effecturi nicaieri
+	public Coins add(Coins toAdd) { 
 		Map<Coin, Integer> newMap = new HashMap<>(this.coinNumbers);
 		for (Coin coin : toAdd.coinNumbers.keySet()) {
 			newMap.put(coin, toAdd.coinNumbers.get(coin)+ newMap.get(coin));
 		}
 		return new Coins(newMap); 
 	}
+	
+	public Coins remove(Coins toDecrement) {
+		Map<Coin, Integer> newMap = new HashMap<>(this.coinNumbers);
+		for (Coin coin : toDecrement.coinNumbers.keySet()) {
+			int newValue = newMap.get(coin) - toDecrement.coinNumbers.get(coin);
+			if (newValue < 0) {
+				throw new IllegalArgumentException();
+			}
+			newMap.put(coin, newValue);
+		}
+		return new Coins(newMap); 
+	}
+
+
 
 	public Coins add(Coin coin) {
 		Map<Coin, Integer> newMap = new HashMap<>(coinNumbers);
@@ -106,6 +118,8 @@ class Coins {
 	}
 
 
+
+	
 
 	
 	

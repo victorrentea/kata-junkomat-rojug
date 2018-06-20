@@ -23,20 +23,27 @@ public class CoinMachine {
 		this.coinStock = newStock;
 	}
 
-	
-	public Coins provideChange(int cents, Coins userCoins) {
+	/// MUTATOARE - face side-effecturi -->
+	public Coins acceptPaymentCoins(int changeCents, Coins depositedCoins) {
 		Coins allCoins = new Coins();
 		allCoins = allCoins.add(coinStock);
-		allCoins = allCoins.add(userCoins);
+		allCoins = allCoins.add(depositedCoins);
 		
-		Coins coins = new Coins();
-		while (cents > 0) {
-			Coin coin = getLargestCoinLessThan(allCoins, cents); // CAND CRAPA ASTA ???!
-			cents -= coin.cents;
-			coins = coins.add(coin);
+		//daca as adauga aici monezile userului, daca crapa cu exceptioe la getLargestCoinLessThan 
+		// --> ar trebui sa prind exceptia ca sa-i scot banii omului din stocu meu 
+		
+		Coins changeCoins = new Coins();
+		while (changeCents > 0) {
+			Coin coin = getLargestCoinLessThan(allCoins, changeCents); // CAND CRAPA ASTA ???!
+			changeCents -= coin.cents;
+			changeCoins = changeCoins.add(coin);
 		}
-		return coins;
+		coinStock = coinStock.add(depositedCoins).remove(changeCoins);
+		return changeCoins;
 	}
+ 
+//	public void addRemoveCoins(Coins toRemove, Coins toAdd) {
+//	}
 
 	private Coin getLargestCoinLessThan(Coins allCoins, int cents) {
 		return COINS_ORDERED.stream()

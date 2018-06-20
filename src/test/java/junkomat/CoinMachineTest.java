@@ -19,20 +19,20 @@ public class CoinMachineTest {
 	@Test
 	public void fourEur() {
 		machine.setCoinStock(Coins.UNLIMITED_COINS);
-		Coins change = machine.provideChange(400, new Coins());
+		Coins change = machine.acceptPaymentCoins(400, new Coins());
 		assertEquals(new Coins(Coin.TWO_EURO, Coin.TWO_EURO), change);
 	}
 	
 	@Test(expected = IllegalArgumentException.class)
 	public void tooLowDivision() {
 		machine.setCoinStock(Coins.UNLIMITED_COINS);
-		machine.provideChange(1, new Coins());
+		machine.acceptPaymentCoins(1, new Coins());
 	}
 	
 	@Test
 	public void eigthy() {
 		machine.setCoinStock(Coins.UNLIMITED_COINS);
-		Coins change = machine.provideChange(80, new Coins());
+		Coins change = machine.acceptPaymentCoins(80, new Coins());
 		assertEquals(new Coins(Coin.TEN_CENTS, Coin.TWENTY_CENTS, Coin.FIFTY_CENTS), change);
 	}
 	
@@ -40,14 +40,14 @@ public class CoinMachineTest {
 	@Test
 	public void haveToReturn20Cents_butOnlyHas10CentsCoinsInStock() {
 		machine.setCoinStock(new Coins(singletonMap(Coin.TEN_CENTS, Integer.MAX_VALUE)));
-		Coins change = machine.provideChange(20, new Coins());
+		Coins change = machine.acceptPaymentCoins(20, new Coins());
 		assertEquals(new Coins(Coin.TEN_CENTS, Coin.TEN_CENTS), change);
 	}
 	
 	
 	@Test
 	public void givenEmptyMachine_whenUserProvides2x10cents_andWants10CentsChange_machineGivesOneOfHisCoinsBack() {
-		Coins change = machine.provideChange(10, new Coins(singletonMap(Coin.TEN_CENTS, 2)));
+		Coins change = machine.acceptPaymentCoins(10, new Coins(singletonMap(Coin.TEN_CENTS, 2)));
 		// Dar daca cumva totusi nu poate da restul omului ?? Ar trebui sa 'anulez' refill-ul
 		assertEquals(new Coins(Coin.TEN_CENTS), change);
 	}
