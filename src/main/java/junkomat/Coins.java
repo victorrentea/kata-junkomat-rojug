@@ -11,6 +11,12 @@ import java.util.stream.Stream;
 
 // gramada de monezi -- imutabila
 class Coins {
+	
+	public static final Coins UNLIMITED_COINS = new Coins(
+			Stream.of(Coin.values())
+			.collect(toMap(identity(), c -> Integer.MAX_VALUE)));
+	
+	
 	private static final Map<Coin, Integer> NO_COINS_STOCK = 
 			Stream.of(Coin.values())
 			.collect(toMap(identity(), c -> 0));

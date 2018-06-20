@@ -13,27 +13,25 @@ import org.junit.Test;
 
 public class CoinMachineTest {
 	
-	private static final Map<Coin, Integer> UNLIMITED_COIN_STOCK = 
-			Stream.of(Coin.values())
-			.collect(toMap(identity(), c -> Integer.MAX_VALUE));
+	
 	private CoinMachine machine = new CoinMachine();
 
 	@Test
 	public void fourEur() {
-		machine.setCoinStock(new Coins(UNLIMITED_COIN_STOCK));
+		machine.setCoinStock(Coins.UNLIMITED_COINS);
 		Coins change = machine.provideChange(400, new Coins());
 		assertEquals(new Coins(Coin.TWO_EURO, Coin.TWO_EURO), change);
 	}
 	
 	@Test(expected = IllegalArgumentException.class)
 	public void tooLowDivision() {
-		machine.setCoinStock(new Coins(UNLIMITED_COIN_STOCK));
+		machine.setCoinStock(Coins.UNLIMITED_COINS);
 		machine.provideChange(1, new Coins());
 	}
 	
 	@Test
 	public void eigthy() {
-		machine.setCoinStock(new Coins(UNLIMITED_COIN_STOCK));
+		machine.setCoinStock(Coins.UNLIMITED_COINS);
 		Coins change = machine.provideChange(80, new Coins());
 		assertEquals(new Coins(Coin.TEN_CENTS, Coin.TWENTY_CENTS, Coin.FIFTY_CENTS), change);
 	}

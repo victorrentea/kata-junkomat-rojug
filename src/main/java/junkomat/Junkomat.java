@@ -3,15 +3,32 @@ package junkomat;
 import java.util.HashMap;
 import java.util.Map;
 
+// stateful
 public class Junkomat {
 	
-	private CoinMachine coinMachine;
+	private final CoinMachine coinMachine;
 	
 	private Map<Integer, ProductInfo> products = new HashMap<>();
 	
+	// 3 care ia 'subcomponenta' ca param de constructor
+	public Junkomat(CoinMachine coinMachine) {
+		this.coinMachine = coinMachine;
+	}
+
 	public void refill(Map<Integer, ProductInfo> newProducts) {
 		this.products = newProducts;
 	}
+	
+	
+	
+	//1 care expune prea multe  vs Tell Don't Ask
+//	public CoinMachine getCoinMachine() {
+//		return coinMachine;
+//	}
+	// 2 care face delegare
+//	public void setCoinStock(Coins newStock) {
+//		coinMachine.setCoinStock(newStock);
+//	}
 	
 	public PurchasedDrinkAndChange purchase(DrinkRequest selection, Coins deposit) {
 		int price = products.get(selection.getCode()).getPrice();
