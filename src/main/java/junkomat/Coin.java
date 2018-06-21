@@ -1,6 +1,6 @@
 package junkomat;
 
-enum Coin {
+public enum Coin {
 	ONE_EURO(100),
 	TWO_EURO(200),
 	FIFTY_CENTS(50),

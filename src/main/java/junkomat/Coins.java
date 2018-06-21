@@ -10,7 +10,7 @@ import java.util.Map;
 import java.util.stream.Stream;
 
 // gramada de monezi -- imutabila
-class Coins {
+public class Coins {
 	
 	public static final Coins UNLIMITED_COINS = new Coins(
 			Stream.of(Coin.values())

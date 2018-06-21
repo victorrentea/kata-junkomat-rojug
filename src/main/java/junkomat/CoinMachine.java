@@ -42,9 +42,6 @@ public class CoinMachine {
 		return changeCoins;
 	}
  
-//	public void addRemoveCoins(Coins toRemove, Coins toAdd) {
-//	}
-
 	private Coin getLargestCoinLessThan(Coins allCoins, int cents) {
 		return COINS_ORDERED.stream()
 				.filter(c -> c.cents <= cents)

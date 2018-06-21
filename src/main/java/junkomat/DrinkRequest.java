@@ -1,6 +1,6 @@
 package junkomat;
 
-class DrinkRequest {
+public class DrinkRequest {
 	final int code;
 
 	public DrinkRequest(int code) {
